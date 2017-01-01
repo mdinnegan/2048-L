@@ -28,27 +28,14 @@ function setUpBoard(){
 
 //keep running WHILE there's not a 2 at that position
 function addTile() {
-		var x = Math.round(Math.random()*3);
-		var y = Math.round(Math.random()*3);
-		board[x][y] = 2;
-}
-	
-
-function printBoard(){
-	var board = '<br/>' + "*--------------*" + '<br/>';
-	for(var i=0; i<board.length; i++){
-		board += "|   ";
-		for(var j=0; j<board[i].length; j++){
-			board += board[i][j] + "   |   ";
-		}
-		board += '<br/>';
-		board += "*--------------*";
-		board += '<br/>';
-	}
-	
-	//console.log(board);
-	document.getElementById("container").innerHTML = board;
-
+	var x = Math.round(Math.random()*3);
+	var y = Math.round(Math.random()*3);
+    if(board[x][y] == 0){
+	   board[x][y] = 2;
+    }
+    else{
+        addTile();
+    }
 }
 
 //function gets called anytime  a key is pressed 
@@ -65,7 +52,7 @@ document.onkeydown = function(e) {
     if (e.keyCode == UP_ARROW) {
         // up arrow
         moveTilesUp();
-        addTile();   
+        addTile();
     }
     //double equals sign will convert it for us 
     else if (e.keyCode == DOWN_ARROW) {
@@ -89,8 +76,7 @@ document.onkeydown = function(e) {
 };
 
 function moveTilesUp()
-{
-    
+{    
     for(var r=0; r < board.length; r++)
     {
         for(var c=0; c<board[r].length; c++)
@@ -195,25 +181,30 @@ function moveTilesRight()
 }
 
 //2D array initialized with sample values. To get a blank board initialize all the values to zero
-var board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
 
 //As soon as webpage loads run these two functions
-$(document).ready(function(){
-	printBoard();
-	console.log("Loaded webpage"); //how you do print statements in javascript
-});
+// $(document).ready(function(){
+	// printBoard();
+	// console.log("Loaded webpage"); //how you do print statements in javascript
+// });
 
 function printBoard(){
 
 	for(var i = 0; i < 4; i++){
 		for(var j = 0; j < 4; j++){
 			var boardID = "r"+i+"c"+j;
-			//if the tile is not zero, put it on the board 
-			if(board[i][j]!=0){
-				document.getElementById(boardID).innerHTML = board[i][j];
-			}
+			//if the tile is not zero, put it on the board
+            if(board[i][j] != 0){
+                document.getElementById(boardID).innerHTML = board[i][j];
+            }
+            else{
+                document.getElementById(boardID).innerHTML = " "; 
+            }
 			//Change the different number tiles to different colors
 			switch(board[i][j]){
+                case 0:
+                    document.getElementById(boardID).style.background = "#ccc0b3";
+                    break;
 				case 2:
 					document.getElementById(boardID).style.background = "#f0e5da";
 					break;//similar to an else if. Makes sure none of the other cases executes if this one does
