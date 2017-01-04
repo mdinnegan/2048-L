@@ -4,6 +4,8 @@ var DOWN_ARROW = 40;
 var LEFT_ARROW = 37;
 var RIGHT_ARROW = 39;
 
+var score = 0;
+
 //As soon as webpage loads run these two functions
 $(document).ready(function(){
 	setUpBoard();
@@ -85,14 +87,14 @@ function moveTilesUp()
             {
                 board[r-1][c] = board[r][c];
                 board[r][c] = 0;
-                moveTilesUp();
+                //moveTilesUp();
             }
 
             if(r !== 0  && board[r][c] !== 0 && board[r-1][c] === board[r][c])
             {
                 board[r-1][c] = board[r][c] * 2;
                 board[r][c] = 0;
-                moveTilesUp();
+                //moveTilesUp();
             }
             
         }
@@ -111,14 +113,14 @@ function moveTilesDown()
             {
                 board[r+1][c] = board[r][c];
                 board[r][c] = 0;
-                moveTilesDown();
+                //moveTilesDown();
             }
             
             if(r !== 3  && board[r][c] !== 0 && board[r+1][c] === board[r][c])
             {
                 board[r+1][c] = board[r][c] * 2;
                 board[r][c] = 0;
-                moveTilesDown();
+                //moveTilesDown();
             }
 
         }
@@ -137,14 +139,14 @@ function moveTilesLeft()
             {
                 board[r][c-1] = board[r][c];
                 board[r][c] = 0;
-                moveTilesLeft();
+                //moveTilesLeft();
             }
             
             if(c !== 0  && board[r][c] !== 0 && board[r][c-1] === board[r][c])
             {
                 board[r][c-1] = board[r][c] * 2;
                 board[r][c] = 0;
-                moveTilesLeft();
+                // moveTilesLeft();
             }
 
         }
@@ -164,14 +166,14 @@ function moveTilesRight()
             {
                 board[r][c+1] = board[r][c];
                 board[r][c] = 0;
-                moveTilesRight();
+                // moveTilesRight();
             }
 
             if(c !== 3  && board[r][c] !== 0 && board[r][c+1] === board[r][c])
             {
                 board[r][c+1] = board[r][c] * 2;
                 board[r][c] = 0;
-                moveTilesRight();
+                // moveTilesRight();
             }
             
         }
@@ -189,6 +191,7 @@ function moveTilesRight()
 // });
 
 function printBoard(){
+    document.getElementById("scoreboard").innerHTML = "Score: " + score;
 
 	for(var i = 0; i < 4; i++){
 		for(var j = 0; j < 4; j++){
