@@ -5,13 +5,21 @@ var LEFT_ARROW = 37;
 var RIGHT_ARROW = 39;
 
 var score = 0;
+var addingScore = 0;
+var SX = 0;
 
 //As soon as webpage loads run these two functions
 $(document).ready(function(){
 	setUpBoard();
 	printBoard();
+    printWin();
 	console.log("Loaded webpage"); //how you do print statements in javascript
 });
+
+function printWin(){
+    if(board[x][y] == 2048)
+        window.alert("You win!");
+}
 
 function setUpBoard(){
 
@@ -26,6 +34,11 @@ function setUpBoard(){
 	
 	addTile();
 	
+}
+
+function makeScore(addingScore) {
+	SX = score + addingScore;
+    score = SX;
 }
 
 //keep running WHILE there's not a 2 at that position
@@ -54,28 +67,52 @@ document.onkeydown = function(e) {
     if (e.keyCode == UP_ARROW) {
         // up arrow
         moveTilesUp();
+        combineTilesUp();
         addTile();
     }
     //double equals sign will convert it for us 
     else if (e.keyCode == DOWN_ARROW) {
         // down arrow
         moveTilesDown();
+        combineTilesDown();
         addTile();
     }
     else if (e.keyCode == LEFT_ARROW) {
        // left arrow
        moveTilesLeft();
+       combineTilesLeft();
        addTile();
     }
     else if (e.keyCode == RIGHT_ARROW) {
        // right arrow
        moveTilesRight();
+       combineTilesRight();
        addTile();
     } 
     
     printBoard(); //have to recall print board to get the board to update
 
 };
+
+function combineTilesUp()
+{
+	for(var r=0; r < board.length; r++)
+    {
+        for(var c=0; c<board[r].length; c++)
+        {
+	            if(r !== 0  && board[r][c] !== 0 && board[r-1][c] === board[r][c])
+            {
+                board[r-1][c] = board[r][c] * 2;
+                board[r][c] = 0;
+                makeScore(board[r-1][c]);
+                moveTilesUp();
+            }
+
+        }
+
+    }
+
+}
 
 function moveTilesUp()
 {    
@@ -87,20 +124,33 @@ function moveTilesUp()
             {
                 board[r-1][c] = board[r][c];
                 board[r][c] = 0;
-                //moveTilesUp();
-            }
-
-            if(r !== 0  && board[r][c] !== 0 && board[r-1][c] === board[r][c])
-            {
-                board[r-1][c] = board[r][c] * 2;
-                board[r][c] = 0;
-                //moveTilesUp();
+                moveTilesUp();
             }
             
         }
         
     }   
     
+}
+
+function combineTilesDown()
+{
+	for(var r=3; r >= 0; r--)
+    {
+        for(var c=0; c<board[r].length; c++)
+        {
+        	if(r !== 3  && board[r][c] !== 0 && board[r+1][c] === board[r][c])
+            {
+                board[r+1][c] = board[r][c] * 2;
+                board[r][c] = 0;
+                makeScore(board[r+1][c]);
+                moveTilesDown();
+            }
+
+        }
+
+ 	}
+
 }
 
 function moveTilesDown()
@@ -113,20 +163,33 @@ function moveTilesDown()
             {
                 board[r+1][c] = board[r][c];
                 board[r][c] = 0;
-                //moveTilesDown();
-            }
-            
-            if(r !== 3  && board[r][c] !== 0 && board[r+1][c] === board[r][c])
-            {
-                board[r+1][c] = board[r][c] * 2;
-                board[r][c] = 0;
-                //moveTilesDown();
+                moveTilesDown();
             }
 
         }
         
     }   
     
+}
+
+function combineTilesLeft()
+{
+	for(var r=0; r < board.length; r++)
+    {
+        for(var c=0; c<board[r].length; c++)
+        {
+       		if(c !== 0  && board[r][c] !== 0 && board[r][c-1] === board[r][c])
+            {
+                board[r][c-1] = board[r][c] * 2;
+                board[r][c] = 0;
+                makeScore(board[r][c-1]);
+                moveTilesLeft();
+            }
+
+        }
+
+    }
+
 }
 
 function moveTilesLeft()
@@ -139,14 +202,7 @@ function moveTilesLeft()
             {
                 board[r][c-1] = board[r][c];
                 board[r][c] = 0;
-                //moveTilesLeft();
-            }
-            
-            if(c !== 0  && board[r][c] !== 0 && board[r][c-1] === board[r][c])
-            {
-                board[r][c-1] = board[r][c] * 2;
-                board[r][c] = 0;
-                // moveTilesLeft();
+                moveTilesLeft();
             }
 
         }
@@ -155,9 +211,28 @@ function moveTilesLeft()
 
 }
 
-function moveTilesRight()
+function combineTilesRight()
 {
-    
+    for(var r=0; r < board.length; r++)
+    {
+        for(var c=3; c >= 0; c--)
+        {
+        	if(c !== 3  && board[r][c] !== 0 && board[r][c+1] === board[r][c])
+            {
+                board[r][c+1] = board[r][c] * 2;
+                board[r][c] = 0;
+                makeScore(board[r][c+1]);
+                moveTilesRight();
+            }
+
+        }
+
+    }
+
+}
+
+function moveTilesRight()
+{ 
     for(var r=0; r < board.length; r++)
     {
         for(var c=3; c >= 0; c--)
@@ -166,14 +241,7 @@ function moveTilesRight()
             {
                 board[r][c+1] = board[r][c];
                 board[r][c] = 0;
-                // moveTilesRight();
-            }
-
-            if(c !== 3  && board[r][c] !== 0 && board[r][c+1] === board[r][c])
-            {
-                board[r][c+1] = board[r][c] * 2;
-                board[r][c] = 0;
-                // moveTilesRight();
+                moveTilesRight();
             }
             
         }
@@ -191,7 +259,7 @@ function moveTilesRight()
 // });
 
 function printBoard(){
-    document.getElementById("scoreboard").innerHTML = "Score: " + score;
+    document.getElementById("scoreboard").innerHTML = "Score: " + SX;
 
 	for(var i = 0; i < 4; i++){
 		for(var j = 0; j < 4; j++){
